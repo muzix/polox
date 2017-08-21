@@ -36,6 +36,8 @@ const DATABASE_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/polonie
 const IS_DEVELOPMENT = process.env.NODE_ENV !== 'production';
 const DASHBOARD_AUTH = process.env.DASHBOARD_AUTH || 'polonie:muzix@polonie';
 
+// TMP
+
 // Parse.initialize(APP_ID);
 // Parse.serverURL = `http://${SERVER_HOST}:${SERVER_PORT}/services`;
 // Parse.masterKey = MASTER_KEY;
