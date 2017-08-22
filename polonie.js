@@ -8,7 +8,7 @@ import Parse from 'parse/node';
 var program = require('commander');
 import { bittrex } from './bittrex';
 
-const crypto = require('crypto');
+import * as Utils from './utils';
 
 class Command {
   constructor() {
@@ -32,42 +32,42 @@ class Command {
     program
       .command('buy [symbol]')
       .description('Buy in an amount of symbol')
-      .action(this.buy);
+      .action(this.private(this.buy));
 
     program
       .command('sell [symbol]')
       .description('Sell out an amount of symbol')
-      .action(this.sell);
+      .action(this.private(this.sell));
 
     program
       .command('check [uuid]')
       .description('Check status of an order')
-      .action(this.check);
+      .action(this.private(this.check));
 
     program
       .command('checkall')
       .description('Check status of all open orders')
-      .action(this.checkAll);
+      .action(this.private(this.checkAll));
 
     program
       .command('cancel [uuid]')
       .description('Cancel an order')
-      .action(this.cancel);
+      .action(this.private(this.cancel));
 
     program
       .command('cancelall')
       .description('Cancel all orders')
-      .action(this.cancelAll);
+      .action(this.private(this.cancelAll));
 
     program
       .command('balances')
       .description('Get all balances')
-      .action(this.balances);
+      .action(this.private(this.balances));
 
     program
       .command('checkuuid')
       .description('Check order directly on bittrex by uuid')
-      .action(this.checkuuid);
+      .action(this.private(this.checkuuid));
 
     program
       .command('register')
@@ -126,26 +126,81 @@ class Command {
       if (program.exchange !== 'BITTREX' && program.exchange !== 'POLONIEX') {
         this.reply('Chỉ hỗ trợ sàn BITTREX và POLONIEX');
       } else {
-        let p1 = this.encrypt(program.apikey);
-        let p2 = this.encrypt(program.apisecret);
+        let p1 = Utils.encrypt(program.apikey);
+        let p2 = Utils.encrypt(program.apisecret);
         Promise.all([p1, p2]).then(values => {
           let encryptedApiKey = values[0];
           let encryptedApiSecret = values[1];
           let Account = Parse.Object.extend('Account');
-          let account = new Account();
-          account.set('user_id', program.userid);
-          account.set('exchange', program.exchange);
-          account.set('api_key', encryptedApiKey);
-          account.set('api_secret', encryptedApiSecret);
-          account.save(null, { useMasterKey: true }).then(obj => {
-            // console.log(obj);
-            this.reply('Tài khoản đã được tạo!');
-          }, err => {
-            // console.log(err.message);
-            this.reply(err.message);
-          });
+          let query = new Parse.Query(Account);
+          query.equalTo('user_id', program.userid);
+          query.equalTo('exchange', program.exchange);
+          query.find({ useMasterKey: true }).then(results => {
+            let account = null;
+            let accountExist = false;
+            if (results.length <= 0) {
+              // Create new Account
+              accountExist = false;
+              account = new Account();
+              account.set('user_id', program.userid);
+              account.set('exchange', program.exchange);
+            } else if (results.length === 1){
+              // Get existing account
+              accountExist = true;
+              account = results[0];
+            } else {
+              this.reply(`Có nhiều tài khoản ${program.exchange} cho tài khoản này. Có gì không đúng?`)
+              return;
+            }
+            account.set('api_key', encryptedApiKey);
+            account.set('api_secret', encryptedApiSecret);
+            account.save(null, { useMasterKey: true }).then(obj => {
+              // console.log(obj);
+              if (accountExist) {
+                this.reply('Tài khoản đã được cập nhật');
+              } else {
+                this.reply('Tài khoản đã được tạo!');
+              }
+            }, err => {
+              // console.log(err.message);
+              this.reply(err.message);
+            });
+          })
         });
       }
+    }
+  }
+
+  private = (fnc) => (argv) => {
+    if (program.userid == null) {
+      this.reply('Lệnh không hợp lệ!');
+    } else {
+      var Account = Parse.Object.extend("Account");
+      var query = new Parse.Query(Account);
+      query.equalTo("user_id", program.userid);
+      if (program.exchange) {
+        query.equalTo("exchange", program.exchange);
+      }
+      query.find({ useMasterKey: true }).then(results => {
+        if (results.length <= 0) {
+          this.reply('Tài khoản chưa được tạo!');
+        } else {
+          let account = results[0];
+          if (program.exchange === 'BITTREX') {
+            let p1 = Utils.decrypt(account.get('api_key'));
+            let p2 = Utils.decrypt(account.get('api_secret'));
+            Promise.all([p1, p2]).then(values => {
+              bittrex.options({
+                'apikey' : values[0],
+                'apisecret' : values[1]
+              });
+              fnc(argv);
+            });
+          } else {
+            this.reply('Chưa code xong sàn này, chờ coder làm giàu đã :))!');
+          }
+        }
+      });
     }
   }
 
@@ -165,10 +220,12 @@ class Command {
             let exchange = result.get('exchange');
             let encryptedApiKey = result.get('api_key');
             let encryptedApiSecret = result.get('api_secret');
-            let p1 = this.decrypt(encryptedApiKey);
-            let p2 = this.decrypt(encryptedApiSecret);
+            let p1 = Utils.decrypt(encryptedApiKey);
+            let p2 = Utils.decrypt(encryptedApiSecret);
             return Promise.all([p1, p2]).then(values => {
-              return `Exchange: ${exchange}\nAPI_KEY: ${values[0]}\nAPI_SECRET: ${values[1]}\n`;
+              let censored1 = values[0].substr(0,5) + values[0].substr(6, values[0].length - 5).replace(/./g, '#');
+              let censored2 = values[1].substr(0,5) + values[1].substr(6, values[1].length - 5).replace(/./g, '#');
+              return `Exchange: ${exchange}\nAPI_KEY: ${censored1}\nAPI_SECRET: ${censored2}\n`;
             });
           });
           Promise.all(promises).then(values => {
@@ -178,42 +235,6 @@ class Command {
         }
       });
     }
-  }
-
-  encrypt = (data) => {
-    return new Promise((resolve, reject) => {
-      const cipher = crypto.createCipher('aes192', process.env.CIPHER_PWD);
-      let encrypted = '';
-      cipher.on('readable', () => {
-        const data = cipher.read();
-        if (data)
-          encrypted += data.toString('hex');
-      });
-      cipher.on('end', () => {
-        resolve(encrypted);
-      });
-
-      cipher.write(data);
-      cipher.end();
-    });
-  }
-
-  decrypt = (data) => {
-    return new Promise((resolve, reject) => {
-      const decipher = crypto.createDecipher('aes192', process.env.CIPHER_PWD);
-      let decrypted = '';
-      decipher.on('readable', () => {
-        const data = decipher.read();
-        if (data)
-          decrypted += data.toString('utf8');
-      });
-      decipher.on('end', () => {
-        resolve(decrypted);
-      });
-
-      decipher.write(data, 'hex');
-      decipher.end();
-    });
   }
 
   buy = (symbol) => {
@@ -467,7 +488,7 @@ class Command {
         if (availBalances.length > 0) {
           let message = '';
           availBalances.map(balance => {
-            let info = `#${balance.Currency}\nBalance: ${balance.Balance}\n\nAvailable: ${balance.Available}\n\nPending: ${balance.Pending}\n\nAddress: ${balance.CryptoAddress}\n\n`;
+            let info = `#${balance.Currency}\nBalance: ${balance.Balance}\nAvailable: ${balance.Available}\nPending: ${balance.Pending}\nAddress: ${balance.CryptoAddress}\n\n`;
             message = message + info;
           });
           // console.log(message);

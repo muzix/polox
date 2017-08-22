@@ -34,9 +34,9 @@ client.on("message", message => {
   let realArgv = commandStr.split(/\s+/);
   let cmd = realArgv[0];
   let argv = fakeArgv.concat(realArgv);
-  if (cmd === 'register' || cmd === 'account') {
-    argv = argv.concat(['--userid', message.author.id]);
-  }
+  // if (cmd === 'register' || cmd === 'account') {
+    argv = argv.concat(['--userid', message.author.id, '--exchange', 'BITTREX']);
+  // }
   console.log(argv);
   command.parse(argv, msg => {
     message.channel.send(msg);

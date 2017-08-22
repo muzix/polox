@@ -4,8 +4,6 @@ require('dotenv').config();
 export const bittrex = require('node.bittrex.api');
 
 bittrex.options({
-  'apikey' : process.env.BITTREX_API_KEY,
-  'apisecret' : process.env.BITTREX_API_SECRET,
   'stream' : false, // will be removed from future versions
   'verbose' : true,
   'cleartext' : false
