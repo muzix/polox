@@ -1,4 +1,4 @@
-import { bittrex } from '../bittrex';
+import { bittrex } from '../exchange';
 const chalk = require('chalk');
 
 Parse.Cloud.job('pumpdetect', (request, status) => {

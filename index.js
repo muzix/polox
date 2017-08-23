@@ -25,7 +25,7 @@ import Parse from 'parse/node';
 import {ParseServer} from 'parse-server';
 import ParseDashboard from 'parse-dashboard';
 // var logger = require('parse-server/lib/Adapters/Logger/FileLoggerAdapter').FileLoggerAdapter
-import command from './polonie';
+import polonie from './command/polonie';
 
 const SERVER_PORT = process.env.PORT || 8082;
 const SERVER_HOST = process.env.HOST || 'localhost';
@@ -92,11 +92,12 @@ if (IS_DEVELOPMENT) {
 }
 
 //SKYPE MESSAGE WEBHOOK
-import { connector } from './skype';
-server.post('/api/messages', connector.listen());
+// import { connector } from './skype';
+// server.post('/api/messages', connector.listen());
 
-//DISCORD BOT
-import { client } from './discord';
+//CHAT BOT INIT
+import chatbot from './chatbot';
+chatbot.initialize();
 
 // import { sendNotification } from './firebase';
 // sendNotification('Hello', 'test');
