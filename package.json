@@ -7,7 +7,8 @@
     "polonie": "./polonie.js"
   },
   "scripts": {
-    "start": "babel-node ./index.js",
+    "start": "pm2 start --interpreter babel-node ./index.js",
+    "restart": "pm2 restart all",
     "test": "echo \"Error: no test specified\" && exit 1",
     "polonie": "babel-node ./polonie.js"
   },
@@ -26,8 +27,10 @@
     "fixed-array": "^1.0.0",
     "node-fetch": "^1.7.1",
     "node.bittrex.api": "^0.3.2",
+    "pad-right": "^0.2.2",
     "parse-dashboard": "^1.0.28",
-    "parse-server": "^2.4.2"
+    "parse-server": "^2.4.2",
+    "pm2": "^2.6.1"
   },
   "devDependencies": {
     "babel-plugin-transform-class-properties": "^6.24.1"

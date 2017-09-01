@@ -33,56 +33,79 @@ class Command {
 
     program
       .command('buy [symbol]')
+      .allowUnknownOption()
       .description('Buy in an amount of symbol')
       .action(this.private(SubCommand.buy));
 
     program
       .command('sell [symbol]')
+      .allowUnknownOption()
       .description('Sell out an amount of symbol')
       .action(this.private(SubCommand.sell));
 
     program
       .command('check [uuid]')
+      .allowUnknownOption()
       .description('Check status of an order')
       .action(this.private(SubCommand.check));
 
     program
       .command('checkall')
+      .allowUnknownOption()
       .description('Check status of all open orders')
       .action(this.private(SubCommand.checkAll));
 
     program
       .command('cancel [uuid]')
+      .allowUnknownOption()
       .description('Cancel an order')
       .action(this.private(SubCommand.cancel));
 
     program
       .command('cancelall')
+      .allowUnknownOption()
       .description('Cancel all orders')
       .action(this.private(SubCommand.cancelAll));
 
     program
       .command('balances')
+      .allowUnknownOption()
       .description('Get all balances')
       .action(this.private(SubCommand.balances));
 
     program
       .command('checkuuid')
+      .allowUnknownOption()
       .description('Check order directly on bittrex by uuid')
       .action(this.private(SubCommand.checkuuid));
 
     program
       .command('register')
+      .allowUnknownOption()
       .description('Register exchange account with bot')
       .action(this.private(SubCommand.register));
 
     program
       .command('account')
+      .allowUnknownOption()
       .description('Account exchange information')
       .action(this.public(SubCommand.account));
 
     program
+      .command('markets')
+      .allowUnknownOption()
+      .description('List all market sorted by Volume')
+      .action(this.public(SubCommand.markets));
+
+    program
+      .command('ticker [market]')
+      .allowUnknownOption()
+      .description('Get ticker of market')
+      .action(this.public(SubCommand.ticker));
+
+    program
       .command('bithelp')
+      .allowUnknownOption()
       .description('Help')
       .action(this.public(this.help));
 

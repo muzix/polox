@@ -23,6 +23,13 @@ export const initializeDiscord = (client) => {
     // and not get into a spam loop (we call that "botception").
     if(message.author.bot) return;
 
+    // console.log(message.channel.id);
+    if(message.channel.type !== 'dm' &&
+    message.channel.id !== '344357179266039828' &&
+    message.channel.id !== '316438470191087616') {
+      return;
+    }
+
     // Also good practice to ignore any message that does not start with our prefix,
     // which is set in the configuration file.
     if(message.content.indexOf(PREFIX) !== 0) return;
