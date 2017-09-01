@@ -1,5 +1,4 @@
 
-
 // bittrex.getbalance({ currency : 'BTC' }, function( data ) {
 //   console.log( data );
 // });
