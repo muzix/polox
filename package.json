@@ -9,7 +9,7 @@
   "scripts": {
     "start": "pm2 start --interpreter babel-node ./index.js",
     "restart": "pm2 restart all",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Error: no test specified\" && exit 0",
     "polonie": "babel-node ./polonie.js"
   },
   "author": "muzix",
