@@ -35,29 +35,40 @@ export const initializeDiscord = (client) => {
     if(message.content.indexOf(PREFIX) !== 0) return;
 
     let commandStr = message.content.slice(PREFIX.length).trim();
-    let fakeArgv = ['/usr/bin/node', './command/polonie.js'];
-    let realArgv = commandStr.split(/\s+/);
-    let cmd = realArgv[0];
-
-    if (cmd === 'register') {
+    if (commandStr.startsWith('register')) {
       if (message.channel.type !== 'dm') {
         // Message isn't sent in direct channel
         message.channel.send('Thông tin tế nhị, pm riêng đi thím ;)')
         return;
       }
     }
-
-    let argv = fakeArgv.concat(realArgv);
-    // if (cmd === 'register' || cmd === 'account') {
-      argv = argv.concat(['--userid', message.author.id, '--exchange', 'BITTREX']);
+    // let fakeArgv = ['/usr/bin/node', './command/polonie.js'];
+    // let realArgv = commandStr.split(/\s+/);
+    // let cmd = realArgv[0];
+    //
+    // if (cmd === 'register') {
+    //   if (message.channel.type !== 'dm') {
+    //     // Message isn't sent in direct channel
+    //     message.channel.send('Thông tin tế nhị, pm riêng đi thím ;)')
+    //     return;
+    //   }
     // }
-    console.log(argv);
-    polonie.parse(argv, (msg, isPrivate) => {
-      if (!isPrivate) {
-        message.channel.send(msg);
-      } else {
-        message.author.send(msg);
-      }
+    //
+    // let argv = fakeArgv.concat(realArgv);
+    // // if (cmd === 'register' || cmd === 'account') {
+    //   argv = argv.concat(['--userid', message.author.id, '--exchange', 'BITTREX']);
+    // // }
+    // console.log(argv);
+    polonie.parse(commandStr, {
+      reply: (msg, isPrivate) => {
+        if (!isPrivate) {
+          message.channel.send(msg);
+        } else {
+          message.author.send(msg);
+        }
+      },
+      userId: message.author.id,
+      channelType: message.channel.type,
     });
   });
 

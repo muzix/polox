@@ -6,6 +6,8 @@
 
 import Parse from 'parse/node';
 var program = require('commander');
+const yargs = require('yargs');
+const YargsPromise = require('yargs-promise');
 import { bittrex } from '../exchange';
 
 import * as Utils from '../utils';
@@ -19,17 +21,7 @@ class Command {
     Parse.masterKey = process.env.MASTER_KEY;
     // Parse.Cloud.useMasterKey();
 
-    program
-     .version('0.1.0')
-     .allowUnknownOption()
-     .option('-r, --rate [rate]', 'Rate for buy/sell')
-     .option('-b, --btc [btc]', 'Buy/sell btc quantity')
-     .option('-t, --takeprofit [rate]', 'Rate for take profit order')
-     .option('-c, --cutloss [rate]', 'Rate for cut loss order')
-     .option('--userid [userid]', 'User Id of Trader')
-     .option('--exchange [exchange]', 'Name of exchange')
-     .option('--apikey [apikey]', 'API KEY')
-     .option('--apisecret [apisecret]', 'API SECRET');
+    yargs.version('0.1.0');
 
     program
       .command('buy [symbol]')
@@ -79,36 +71,6 @@ class Command {
       .description('Check order directly on bittrex by uuid')
       .action(this.private(SubCommand.checkuuid));
 
-    program
-      .command('register')
-      .allowUnknownOption()
-      .description('Register exchange account with bot')
-      .action(this.private(SubCommand.register));
-
-    program
-      .command('account')
-      .allowUnknownOption()
-      .description('Account exchange information')
-      .action(this.public(SubCommand.account));
-
-    program
-      .command('markets')
-      .allowUnknownOption()
-      .description('List all market sorted by Volume')
-      .action(this.public(SubCommand.markets));
-
-    program
-      .command('ticker [market]')
-      .allowUnknownOption()
-      .description('Get ticker of market')
-      .action(this.public(SubCommand.ticker));
-
-    program
-      .command('bithelp')
-      .allowUnknownOption()
-      .description('Help')
-      .action(this.public(this.help));
-
     // program.on('--help', function(){
     //   console.log('  Examples:');
     //   console.log('');
@@ -118,21 +80,6 @@ class Command {
     // });
 
     this.cmdCallback = null;
-  }
-
-  //ERROR
-  help = () => {
-    program.outputHelp(msg => {
-      // console.log(`
-      //   {code}
-      //   ${msg.replace(/\s+|\r\n|\n/, '')}
-      //   {code}
-      //   `);
-      this.reply(`
-        ${msg.replace(/\s+|\r\n|\n/, '')}
-        `);
-      return msg;
-    });
   }
 
   private = (fnc) => (argv) => {
@@ -172,9 +119,24 @@ class Command {
     fnc(this.reply, argv);
   }
 
-  parse = (argv, cb=null) => {
-    this.cmdCallback = cb;
-    program.parse(argv);
+  parse = (commandStr, context) => {
+    this.cmdCallback = context.reply;
+
+    if (this.parser == null) {
+      this.parser = new YargsPromise(yargs, context);
+      this.parser.commandDir('cmds').help();
+    }
+
+    // program.parse(argv);
+    this.parser.parse(commandStr)
+    .then(data => {
+      // console.log(data);
+      // context.reply(data.data);
+    })
+    .catch(data => {
+      // console.log(data);
+      context.reply(data.error.message);
+    });
   }
 
   reply = (msg, isPrivate = false) => {
@@ -196,13 +158,5 @@ class Command {
 // polonie buy BTCLTC --rate 0.00123 --takeprofit 0.00150 --cutloss 0.00090
 // polonie sell BTCLTC --rate 0.00123 --takeprofit 0.00100 --cutloss 0.00150
 
-
-// let fakeArgv = ['', ''];
-// let commandStr = 'buy BTCLTC --rate 0.0012 --takeprofit 0.0023 --cutloss 0.0008';
-// let argv = fakeArgv.concat(commandStr.split(' '));
 const commandInst = new Command();
-// program.parse(process.argv);
-// program.help(null);
-// console.log(result);
-
 export default commandInst;
