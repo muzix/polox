@@ -60,7 +60,7 @@ export const initializeDiscord = (client) => {
     // // }
     // console.log(argv);
     polonie.parse(commandStr, {
-      reply: (msg, isPrivate) => {
+      reply: (msg, isPrivate = false) => {
         if (!isPrivate) {
           message.channel.send(msg);
         } else {
