@@ -2,6 +2,7 @@ import Parse from 'parse/node';
 import {
   getClient
 } from '../../../exchange';
+import * as Utils from '../../../utils';
 
 export const userRequire = fnc => argv => {
   if (argv.userId == null) {
@@ -70,7 +71,8 @@ export const exchangeRequire = fnc => argv => {
         Promise.all([p1, p2]).then(values => {
           argv.parseData = {
             ...argv.parseData,
-            exchangeClient: getClient(exchange, values[0], values[1])
+            exchangeClient: getClient(exchange, values[0], values[1]),
+            exchangeName: exchange,
           }
           if (argv.parseData.exchangeClient == null) {
             reply(`Sàn ${exchange} chưa được hỗ trợ!`);

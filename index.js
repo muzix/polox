@@ -27,6 +27,7 @@ import {ParseServer} from 'parse-server';
 import ParseDashboard from 'parse-dashboard';
 // var logger = require('parse-server/lib/Adapters/Logger/FileLoggerAdapter').FileLoggerAdapter
 import polonie from './command/polonie';
+const debug = require('debug')('polonie');
 
 const SERVER_PORT = process.env.PORT || 8082;
 const SERVER_HOST = process.env.HOST || 'localhost';

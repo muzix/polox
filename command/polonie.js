@@ -129,13 +129,19 @@ class Command {
 
     // program.parse(argv);
     this.parser.parse(commandStr)
-    .then(data => {
+    .then(({ data, argv }) => {
       // console.log(data);
-      // context.reply(data.data);
+      if (data && data !== '') {
+        context.reply(data);
+      }
     })
-    .catch(data => {
-      // console.log(data);
-      context.reply(data.error.message);
+    .catch(({ error, argv }) => {
+      // console.log(error);
+      if (error.message) {
+        context.reply(error.message);
+      } else {
+        context.reply(error);
+      }
     });
   }
 

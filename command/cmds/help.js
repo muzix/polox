@@ -1,6 +1,6 @@
 const yargs = require('yargs');
 
-exports.command = 'bithelp'
+exports.command = 'helpme'
 
 exports.describe = 'Help help'
 

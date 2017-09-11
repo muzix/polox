@@ -6,26 +6,23 @@ exports.command = 'register'
 
 exports.describe = 'Đăng ký tài khoản sàn với Polonie'
 
-exports.builder = {
+exports.builder = yargs => yargs.options({
   'exchange': {
-    'alias': 'exchange',
     'demandOption': true,
     'describe': 'Exchange name (BITTREX/POLONIEX)',
     'type': 'string'
   },
   'key': {
-    alias: 'key',
     demandOption: true,
     describe: 'Exchange api key',
     type: 'string'
   },
   'secret': {
-    alias: 'secret',
-    demandOption: 'true',
+    demandOption: true,
     describe: 'Exchange api secret',
     type: 'string'
   }
-}
+})
 
 exports.handler = argv => {
   console.log('USERID: ' + argv.userId);

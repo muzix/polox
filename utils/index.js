@@ -1,5 +1,6 @@
 require('dotenv').config();
 const crypto = require('crypto');
+const debug = require('debug')('polonie');
 
 export const encrypt = (data) => {
   return new Promise((resolve, reject) => {
@@ -29,7 +30,7 @@ export const decrypt = (data) => {
         decrypted += data.toString('utf8');
     });
     decipher.on('end', () => {
-      console.log(decrypted);
+      // debug(decrypted);
       resolve(decrypted);
     });
 
