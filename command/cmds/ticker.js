@@ -10,7 +10,7 @@ exports.handler = argv => {
   let market = argv.market;
   Exchange.getTicker(market)
   .then(data => {
-    let message = `Bid: ${data.result.Bid}\nAsk: ${data.result.Ask}\nLast: ${data.result.Last}`;
+    let message = `Bid: ${data.result.Bid.toFixed(8)}\nAsk: ${data.result.Ask.toFixed(8)}\nLast: ${data.result.Last.toFixed(8)}`;
     reply(message);
   })
   .catch(error => reply(error));

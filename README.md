@@ -10,10 +10,10 @@
 
 ### 2. Public information
 - [x] !markets: Show Bittrex markets sorted by 24h Volume
-- [x] !ticker <market>: Show Bid/Ask of specified coin
-- [ ] !sharekeo <market> <enterRate> <exitRate> <time>: Chia sẻ kèo với Trader, gồm thông tin coin, giá enter, giá exit, thời gian hiệu lực của kèo
+- [x] !ticker \<market\>: Show Bid/Ask of specified coin
+- [ ] !sharekeo --market \<market\> --enter \<enterRate\> --exit \<exitRate\> --duration \<duration>: Chia sẻ kèo với Trader, gồm thông tin coin, giá enter, giá exit, thời gian hiệu lực của kèo
 - [ ] !showkeo: Danh sách kèo
-- [ ] !theokeo <keoid> <btcAmount>: Theo kèo với số lượng btc tùy ý
+- [ ] !theokeo \<keoid\> \<btcAmount\>: Theo kèo với số lượng btc tùy ý
 
 Kèo sẽ được lưu cùng với thông tin user share kèo.
 Kèo sẽ được monitoring 24/24 từ lúc tạo kèo cho tới khi hết thời gian hiệu lực của kèo để kiểm tra kèo có chuẩn không. Nếu kèo chuẩn thì cộng 1 điểm `Research`, nếu kèo hụt thì trừ 1 điểm `Research`.
@@ -21,8 +21,8 @@ Người theo kèo nếu exit thành công thì cộng 1 điểm `Fame` cho ngư
 
 ### 3. Trading
 - [x] !balances: Show all wallet and balances
-- [ ] !buy --market <market> --enter <enterRate> --profit <takeProfitRate> --loss <cutLossRate> --btc <btcAmount>: Mua thấp bán cao, ezzz!
-- [ ] !marginbuyauto --market <market> --enter <enterRate> --profit <takeProfitRate> --loss <cutLossRate> --btc <btcAmount>: Vào long tự động theo dõi
-- [ ] !marginsellauto --market <market> --enter <enterRate> --profit <takeProfitRate> --loss <cutLossRate> --btc <btcAmount>: Vào short tự động theo dõi
-- [ ] !marginbuy --market <market> --rate <rate> --amount <amount>: Vào long margin bên Polo
-- [ ] !marginsell --market <market> --rate <rate> --amount <amount>: Vào short margin bên Polo
+- [ ] !buy --market \<market\> --enter \<enterRate\> --profit \<takeProfitRate\> --loss \<cutLossRate\> --btc \<btcAmount\>: Mua thấp bán cao, ezzz!
+- [ ] !marginbuyauto --market \<market\> --enter \<enterRate\> --profit \<takeProfitRate\> --loss \<cutLossRate\> --btc \<btcAmount\>: Vào long tự động theo dõi
+- [ ] !marginsellauto --market \<market\> --enter \<enterRate\> --profit \<takeProfitRate\> --loss \<cutLossRate\> --btc \<btcAmount\>: Vào short tự động theo dõi
+- [ ] !marginbuy --market \<market\> --rate \<rate\> --amount \<amount\>: Vào long margin bên Polo
+- [ ] !marginsell --market \<market\> --rate \<rate\> --amount \<amount\>: Vào short margin bên Polo
