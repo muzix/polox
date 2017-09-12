@@ -8,9 +8,8 @@ exports.command = 'account'
 
 exports.describe = 'Hiển thị danh sách sàn đã đăng ký'
 
-exports.handler = userRequire(argv => {
+exports.handler = userRequire((user, argv) => {
   let reply = argv.reply;
-  let { user } = argv.parseData;
   var Account = Parse.Object.extend("Account");
   var query = new Parse.Query(Account);
   query.equalTo("user", user);

@@ -8,7 +8,7 @@ exports.command = 'set [key] [value]'
 
 exports.describe = 'Cập nhật setting của tài khoản'
 
-exports.handler = userRequire(argv => {
+exports.handler = userRequire((user, argv) => {
   console.log('KEY: ' + argv.key);
   console.log('VALUE: ' + argv.value);
   let reply = argv.reply;
@@ -19,7 +19,6 @@ exports.handler = userRequire(argv => {
     argv.reject('Thiếu key và value. Ví dụ: setting set <key> <value>');
     return;
   }
-  let { user } = argv.parseData;
   let Setting = Parse.Object.extend('Setting');
   let query = new Parse.Query(Setting);
   query.equalTo("user", user);

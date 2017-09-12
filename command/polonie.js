@@ -60,12 +60,6 @@ class Command {
       .action(this.private(SubCommand.cancelAll));
 
     program
-      .command('balances')
-      .allowUnknownOption()
-      .description('Get all balances')
-      .action(this.private(SubCommand.balances));
-
-    program
       .command('checkuuid')
       .allowUnknownOption()
       .description('Check order directly on bittrex by uuid')

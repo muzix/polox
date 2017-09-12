@@ -9,11 +9,10 @@ exports.command = 'show [key]'
 
 exports.describe = 'Xem danh sách các cài đặt của tài khoản'
 
-exports.handler = userRequire(argv => {
+exports.handler = userRequire((user, argv) => {
   console.log('KEY: ' + argv.key);
   let reply = argv.reply;
   let key = argv.key;
-  let { user } = argv.parseData;
   let Setting = Parse.Object.extend('Setting');
   let query = new Parse.Query(Setting);
   query.equalTo("user", user);
