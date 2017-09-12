@@ -25,10 +25,10 @@ exports.builder = yargs => yargs.options({
 })
 
 exports.handler = argv => {
-  console.log('USERID: ' + argv.userId);
-  console.log('EXCHANGE: ' + argv.exchange);
-  console.log('API_KEY: ' + argv.key);
-  console.log('API_SECRET: ' + argv.secret);
+  // console.log('USERID: ' + argv.userId);
+  // console.log('EXCHANGE: ' + argv.exchange);
+  // console.log('API_KEY: ' + argv.key);
+  // console.log('API_SECRET: ' + argv.secret);
   let reply = argv.reply;
   let userid = argv.userId;
   let exchange = argv.exchange;
