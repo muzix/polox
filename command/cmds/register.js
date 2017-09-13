@@ -8,9 +8,9 @@ exports.describe = 'Đăng ký tài khoản sàn với Polonie'
 
 exports.builder = yargs => yargs.options({
   'exchange': {
-    'demandOption': true,
-    'describe': 'Exchange name (BITTREX/POLONIEX)',
-    'type': 'string'
+    demandOption: true,
+    describe: 'Exchange name (BITTREX/POLONIEX)',
+    type: 'string'
   },
   'key': {
     demandOption: true,

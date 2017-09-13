@@ -1,6 +1,6 @@
 require('dotenv').config();
 const crypto = require('crypto');
-const debug = require('debug')('polonie');
+var debug = require('debug')('polonie');
 
 export const encrypt = (data) => {
   return new Promise((resolve, reject) => {

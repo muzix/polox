@@ -11,7 +11,7 @@ exports.describe = 'Get all balances'
 
 exports.handler = exchangeRequire((user, exchangeName, exchangeClient, argv) => {
   let reply = argv.reply;
-  Exchange.getBalances(exchangeClient)
+  Exchange.getBalances(exchangeClient)()
   .then(result => {
     let filterResult = result.filter(balance => balance.balance > 0);
     if (filterResult.length <= 0) {

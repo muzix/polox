@@ -19,6 +19,7 @@
 
 
 require('dotenv').config();
+var debug = require('debug')('polonie');
 import path from 'path';
 import express from 'express';
 // import {Schema} from './schema/schema';
@@ -26,8 +27,8 @@ import Parse from 'parse/node';
 import {ParseServer} from 'parse-server';
 import ParseDashboard from 'parse-dashboard';
 // var logger = require('parse-server/lib/Adapters/Logger/FileLoggerAdapter').FileLoggerAdapter
-import polonie from './command/polonie';
-const debug = require('debug')('polonie');
+import polonie from './command/polonie'
+
 
 const SERVER_PORT = process.env.PORT || 8082;
 const SERVER_HOST = process.env.HOST || 'localhost';

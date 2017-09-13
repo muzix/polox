@@ -12,7 +12,7 @@ export const getClient = (exchange, key, secret) => {
 }
 export const getTicker = (market) => bittrexClient.publicGetTicker(market);
 export const getMarketSummaries = () => bittrexClient.publicGetMarketSummaries();
-export const getBalances = (client) => {
+export const getBalances = (client) => () => {
   let ret = {
     currency : '',
 		balance : 0.00000000,
@@ -47,6 +47,48 @@ export const getBalances = (client) => {
           btcValue: parseFloat(balance.btcValue),
         };
       });
+    });
+  }
+}
+
+export const buyLimit = (client) => (market, quantity, rate) => {
+  if (client instanceof Bittrex) {
+    return client.marketBuyLimit(market, quantity, rate).then(response => {
+      if (response.success === false) throw response;
+      let { uuid } = response.result;
+      return uuid;
+    });
+  } else if (client instanceof Poloniex) {
+    return client.buy(market, rate, quantity).then(order => {
+      return order.orderNumber.toString();
+    })
+  }
+}
+
+export const sellLimit = (client) => (market, quantity, rate) => {
+  if (client instanceof Bittrex) {
+    return client.marketSellLimit(market, quantity, rate).then(response => {
+      if (response.success === false) throw response;
+      let { uuid } = response.result;
+      return uuid;
+    });
+  } else if (client instanceof Poloniex) {
+    return client.sell(market, rate, quantity).then(order => {
+      return order.orderNumber.toString();
+    })
+  }
+}
+
+export const cancelOrder = (client) => (orderId) => {
+  if (client instanceof Bittrex) {
+    return client.marketCancel(orderId).then(response => {
+      if (response.success === false) throw response;
+      return true;
+    });
+  } else if (client instanceof Poloniex) {
+    return client.cancelOrder(orderId).then(response => {
+      if (response.success === 1) return true;
+      throw response;
     });
   }
 }
