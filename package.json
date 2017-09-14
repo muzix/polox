@@ -12,7 +12,8 @@
     "build": "npm run clean && npm run build-server",
     "start": "node ./build/index.js",
     "app": "npm run build && npm start",
-    "restart": "pm2 restart all",
+    "deploy": "pm2 start ./build/index.js",
+    "restart": "pm2 stop index && pm2 delete index && npm run deploy",
     "test": "echo \"Error: no test specified\" && exit 0",
     "polonie": "babel-node ./polonie.js"
   },
