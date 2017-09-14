@@ -11,3 +11,6 @@ yarn-error.log
 .env
 firebase.json
 logs
+
+# Build
+build

@@ -5,13 +5,11 @@
  */
 
 import Parse from 'parse/node';
-var program = require('commander');
 const yargs = require('yargs');
 const YargsPromise = require('yargs-promise');
 import { bittrex } from '../exchange';
 
 import * as Utils from '../utils';
-import * as SubCommand from './command';
 
 class Command {
   constructor() {
