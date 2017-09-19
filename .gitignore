@@ -10,7 +10,10 @@ yarn-error.log
 
 .env
 firebase.json
+client_secret.json
 logs
 
 # Build
 build
+
+oauth.js

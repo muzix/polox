@@ -22,7 +22,8 @@ exports.handler = exchangeRequire((user, exchangeName, exchangeClient, argv) => 
     let orderId = order.get('order_id');
     Exchange.cancelOrder(exchangeClient)(orderId)
     .then(isSuccess => {
-      order.destroy({ useMasterKey: true }).then(deletedObject => {
+      order.set('status', 'CANCELLED');
+      order.save(null, { useMasterKey: true }).then(object => {
         reply('Hủy lệnh thành công!')
       }, error => {
         reply(error.message);

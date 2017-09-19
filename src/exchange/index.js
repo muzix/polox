@@ -92,3 +92,42 @@ export const cancelOrder = (client) => (orderId) => {
     });
   }
 }
+
+export const isOrderOpen = (client) => (orderId) => {
+  if (client instanceof Bittrex) {
+    return client.accountGetOrder(orderId).then(response => {
+      if (response.success === false) throw false;
+      if (response.result.IsOpen) return true;
+      throw false;
+    });
+  } else if (client instanceof Poloniex) {
+    return new Promise((resolve, reject) => {
+      client.returnOrderTrades(orderId)
+      .then(response => reject(false))
+      .catch(error => {
+        resolve(true);
+      })
+    });
+  }
+}
+
+export const getTicks = (client) => (market, interval) => {
+  if (client instanceof Bittrex) {
+    // Create new custom Bittrex client
+    let newClient = new Bittrex('', '', 'https', 'bittrex.com', 'v2.0');
+    let intervalChoices = ['1', '5', '15', '30', '1h', '4h', '1D', '1W', '1M'];
+    let intervalParams = ['oneMin', 'fiveMin', null, 'thirtyMin', 'hour', null, 'day', null, null];
+    let intervalParam = intervalParams[intervalChoices.indexOf(interval)];
+    if (intervalParam == null) return Promise.reject(new Error('BITTREX INVALID INTERVAL'));
+    return newClient.doRequest('/pub/market/GetTicks', {
+      marketName: market,
+      tickInterval: intervalParam
+    })
+    .then(response => {
+      if (response.success === false) throw response;
+      return response;
+    });
+  } else if (client instanceof Poloniex) {
+    return Promise.reject(new Error('Poloniex chart is not support yet!'));
+  }
+}

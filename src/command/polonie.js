@@ -19,7 +19,7 @@ class Command {
     Parse.masterKey = process.env.MASTER_KEY;
     // Parse.Cloud.useMasterKey();
 
-    yargs.version('0.1.0');
+    yargs.version('0.1.1');
 
     // this.cmdCallback = null;
   }
