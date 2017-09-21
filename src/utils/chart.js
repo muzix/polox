@@ -5,8 +5,8 @@ function chart(d3, techan, jsonArray, marketName) {
 
   var parseDate = d3.timeParse("%Y-%m-%dT%H:%M:%S");
 
-  // var x = techan.scale.financetime()
-  var x = d3.scaleTime()
+  var x = techan.scale.financetime()
+  // var x = d3.scaleTime()
     .range([0, width]);
 
   var y = d3.scaleLinear()
@@ -27,7 +27,7 @@ function chart(d3, techan, jsonArray, marketName) {
             .orient('right')
             .accessor(candlestick.accessor())
             .format(d3.format(',.8f'))
-            .translate([x(1), 0]);
+            .translate([width, 0]);
 
   var data = jsonArray.map(function (d) {
     return {
@@ -56,7 +56,8 @@ function chart(d3, techan, jsonArray, marketName) {
             .attr("x", 20)
             .text(marketName.toUpperCase());
 
-    x.domain(d3.extent(data.map(accessor.d)));
+    // x.domain(d3.extent(data.map(accessor.d)));
+    x.domain(data.map(accessor.d));
     y.domain(techan.scale.plot.ohlc(data, accessor).domain());
 
     injectCss(svg);
@@ -112,8 +113,8 @@ function advanceChart(d3, techan, jsonArray, marketName) {
 
   var parseDate = d3.timeParse("%Y-%m-%dT%H:%M:%S");
 
-  // var x = techan.scale.financetime()
-  var x = d3.scaleTime()
+  var x = techan.scale.financetime()
+  // var x = d3.scaleTime()
             .range([0, dim.plot.width]);
 
   var y = d3.scaleLinear()
@@ -192,14 +193,14 @@ function advanceChart(d3, techan, jsonArray, marketName) {
             .orient('right')
             .accessor(candlestick.accessor())
             .format(d3.format(',.8f'))
-            .translate([x(1), 0]);
+            .translate([dim.plot.width, 0]);
 
   var rsiCloseAnnotation = techan.plot.axisannotation()
             .axis(rsiAxis)
             .orient('right')
             .accessor(rsi.accessor())
             .format(d3.format(',.2f'))
-            .translate([x(1), 0]);
+            .translate([dim.plot.width, 0]);
 
   var accessor = candlestick.accessor(),
       indicatorPreRoll = 33;  // Don't show where indicators don't have data
@@ -221,7 +222,8 @@ function advanceChart(d3, techan, jsonArray, marketName) {
   // y.domain(techan.scale.plot.ohlc(data.slice(indicatorPreRoll)).domain());
 
   return function(g) {
-    x.domain(d3.extent(data.map(accessor.d)));
+    // x.domain(d3.extent(data.map(accessor.d)));
+    x.domain(data.map(accessor.d));
     y.domain(techan.scale.plot.ohlc(data, accessor).domain());
     yPercent.domain(techan.scale.plot.percent(y, accessor(data[indicatorPreRoll])).domain());
     yVolume.domain(techan.scale.plot.volume(data).domain());
