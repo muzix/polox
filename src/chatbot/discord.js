@@ -67,6 +67,13 @@ export const initializeDiscord = (client) => {
           message.author.send(msg);
         }
       },
+      sendFile: (buffer, isPrivate = false) => {
+        if (!isPrivate) {
+          message.channel.sendFile(buffer);
+        } else new Promise(function(resolve, reject) {
+          message.author.sendFile(buffer);
+        });
+      },
       userId: message.author.id,
       channelType: message.channel.type,
     });

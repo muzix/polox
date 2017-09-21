@@ -16,6 +16,7 @@ var {
 const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
 const svg2png = require('svg2png');
+const Discord = require('discord.js');
 
 exports.command = 'chart <market>'
 
@@ -46,6 +47,7 @@ exports.builder = yargs => yargs.options({
 
 exports.handler = (argv) => {
   let reply = argv.reply;
+  let sendFile = argv.sendFile;
   let market = argv.market;
   let interval = argv.interval;
   let duration = argv.duration;
@@ -68,18 +70,17 @@ exports.handler = (argv) => {
     var buf = Buffer.from(svgStr, 'utf-8');
     return svg2png(buf);
   })
+  // .then(buffer => {
+  //   // fs.writeFile("dest.png", buffer);
+  //   let bufferStream = new stream.PassThrough();
+  //   bufferStream.end(buffer);
+  //   let fileName = `${market}_${new Date().getTime().toString()}.png`;
+  //   return Utils.driveUploadImageFromStream(fileName, 'image/png', process.env.DRIVE_FOLDER_ID, bufferStream)
+  // })
+  // .then(fileId => {
   .then(buffer => {
-    // fs.writeFile("dest.png", buffer);
-    let bufferStream = new stream.PassThrough();
-    bufferStream.end(buffer);
-    let fileName = `${market}_${new Date().getTime().toString()}.png`;
-    return Utils.driveUploadImageFromStream(fileName, 'image/png', process.env.DRIVE_FOLDER_ID, bufferStream)
-  })
-  .then(fileId => {
-    let imageUrl = `https://docs.google.com/uc?id=${fileId}`
-    reply({
-      file: imageUrl
-    });
+    // let imageUrl = `https://docs.google.com/uc?id=${fileId}`
+    sendFile(buffer);
   })
   .catch(error => reply(error.message));
 };
