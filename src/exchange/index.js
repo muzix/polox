@@ -111,8 +111,8 @@ export const isOrderOpen = (client) => (orderId) => {
   }
 }
 
-export const getTicks = (client) => (market, interval) => {
-  if (client instanceof Bittrex) {
+export const getTicks = (market, interval) => {
+  // if (client instanceof Bittrex) {
     // Create new custom Bittrex client
     let newClient = new Bittrex('', '', 'https', 'bittrex.com', 'v2.0');
     let intervalChoices = ['1', '5', '15', '30', '1h', '4h', '1D', '1W', '1M'];
@@ -127,7 +127,7 @@ export const getTicks = (client) => (market, interval) => {
       if (response.success === false) throw response;
       return response;
     });
-  } else if (client instanceof Poloniex) {
-    return Promise.reject(new Error('Poloniex chart is not support yet!'));
-  }
+  // } else if (client instanceof Poloniex) {
+  //   return Promise.reject(new Error('Poloniex chart is not support yet!'));
+  // }
 }
