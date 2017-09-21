@@ -5,8 +5,8 @@ function chart(d3, techan, jsonArray, marketName) {
 
   var parseDate = d3.timeParse("%Y-%m-%dT%H:%M:%S");
 
-  var x = techan.scale.financetime()
-  // var x = d3.scaleTime()
+  // var x = techan.scale.financetime()
+  var x = d3.scaleTime()
     .range([0, width]);
 
   var y = d3.scaleLinear()
@@ -56,8 +56,8 @@ function chart(d3, techan, jsonArray, marketName) {
             .attr("x", 20)
             .text(marketName.toUpperCase());
 
-    // x.domain(d3.extent(data.map(accessor.d)));
-    x.domain(data.map(accessor.d));
+    x.domain(d3.extent(data.map(accessor.d)));
+    // x.domain(data.map(accessor.d));
     y.domain(techan.scale.plot.ohlc(data, accessor).domain());
 
     injectCss(svg);
@@ -113,8 +113,8 @@ function advanceChart(d3, techan, jsonArray, marketName) {
 
   var parseDate = d3.timeParse("%Y-%m-%dT%H:%M:%S");
 
-  var x = techan.scale.financetime()
-  // var x = d3.scaleTime()
+  // var x = techan.scale.financetime()
+  var x = d3.scaleTime()
             .range([0, dim.plot.width]);
 
   var y = d3.scaleLinear()
@@ -222,8 +222,8 @@ function advanceChart(d3, techan, jsonArray, marketName) {
   // y.domain(techan.scale.plot.ohlc(data.slice(indicatorPreRoll)).domain());
 
   return function(g) {
-    // x.domain(d3.extent(data.map(accessor.d)));
-    x.domain(data.map(accessor.d));
+    x.domain(d3.extent(data.map(accessor.d)));
+    // x.domain(data.map(accessor.d));
     y.domain(techan.scale.plot.ohlc(data, accessor).domain());
     yPercent.domain(techan.scale.plot.percent(y, accessor(data[indicatorPreRoll])).domain());
     yVolume.domain(techan.scale.plot.volume(data).domain());
